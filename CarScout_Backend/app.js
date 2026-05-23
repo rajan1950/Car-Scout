@@ -1,38 +1,42 @@
 const express = require("express");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
-require("dotenv").config();
-app.use(express.json());
-// Enable CORS for all routes
-app.use(cors());
 
+// Middleware
+app.use(express.json());
+
+app.use(cors({
+  origin: "https://car-scout-pied.vercel.app",
+  credentials: true
+}));
+
+// Database Connection
 const DBConnection = require("./src/utils/DBConnection");
 DBConnection();
 
-//localhost:4444/user/register
+// Routes
 const userRoutes = require("./src/routes/UserRoutes");
-app.use("/user",userRoutes);
+app.use("/user", userRoutes);
 
 const carRoutes = require("./src/routes/CarRoutes");
-app.use("/car",carRoutes);
+app.use("/car", carRoutes);
 
 const inquiryRoutes = require("./src/routes/InquiryRoutes");
-app.use("/inquiry",inquiryRoutes);
+app.use("/inquiry", inquiryRoutes);
 
 const adminRoutes = require("./src/routes/AdminRoutes");
-app.use("/admin",adminRoutes);
+app.use("/admin", adminRoutes);
 
 const messageRoutes = require("./src/routes/MessageRoutes");
-app.use("/message",messageRoutes);
+app.use("/message", messageRoutes);
 
 const reviewRoutes = require("./src/routes/ReviewRoutes");
-app.use("/reviews",reviewRoutes);
+app.use("/reviews", reviewRoutes);
 
 const testDriveRoutes = require("./src/routes/TestDriveRoutes");
-app.use("/testdrive",testDriveRoutes);
-
-const { startTestDriveReminderWorker } = require("./src/controller/TestDriveController");
+app.use("/testdrive", testDriveRoutes);
 
 const notificationRoutes = require("./src/routes/NotificationRoutes");
 app.use("/notification", notificationRoutes);
@@ -52,8 +56,19 @@ app.use("/email", emailRoutes);
 const offerRoutes = require("./src/routes/offerRoutes");
 app.use("/offer", offerRoutes);
 
-const PORT= process.env.PORT  
+// Test Drive Reminder Worker
+const { startTestDriveReminderWorker } = require("./src/controller/TestDriveController");
+
+// Default Route
+app.get("/", (req, res) => {
+  res.send("Car Scout Backend API Running...");
+});
+
+// PORT
+const PORT = process.env.PORT || 5000;
+
+// Start Server
 app.listen(PORT, () => {
-    startTestDriveReminderWorker();
-    console.log(`Server is running on port ${PORT}`); 
-})
+  startTestDriveReminderWorker();
+  console.log(`Server is running on port ${PORT}`);
+});
