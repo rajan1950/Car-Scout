@@ -3,13 +3,13 @@ const isLocalHost =
   (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
 
 export const APP_CONFIG = {
-  apiBaseUrl: "http://localhost:4444",
+  apiBaseUrl: import.meta.env.VITE_API_URL || "http://localhost:4444",
   email: {
     endpoints: [
-      "http://localhost:4444/email/send",
-      "http://localhost:4444/email/send-purchase",
-      "http://localhost:4444/mail/send",
-      "http://localhost:4444/mailer/send",
+      `${import.meta.env.VITE_API_URL || "http://localhost:4444"}/email/send`,
+      `${import.meta.env.VITE_API_URL || "http://localhost:4444"}/email/send-purchase`,
+      `${import.meta.env.VITE_API_URL || "http://localhost:4444"}/mail/send`,
+      `${import.meta.env.VITE_API_URL || "http://localhost:4444"}/mailer/send`,
     ],
     emailJs: {
       serviceId: "",

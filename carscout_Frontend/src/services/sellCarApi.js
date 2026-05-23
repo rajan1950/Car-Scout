@@ -1,7 +1,7 @@
-import axios from "axios";
+import API from "../utils/api";
 import { readAuthSession } from "../utils/auth";
 
-const SELL_CAR_URL = "http://localhost:4444/car/add";
+const SELL_CAR_URL = "/car/add";
 
 const getAuthHeaders = () => {
   const token = readAuthSession()?.token;
@@ -18,7 +18,7 @@ const getAuthHeaders = () => {
 export const sellCarApi = async (payload) => {
   const isFormData = payload instanceof FormData;
 
-  const response = await axios.post(SELL_CAR_URL, payload, {
+  const response = await API.post(SELL_CAR_URL, payload, {
     headers: {
       ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...getAuthHeaders(),

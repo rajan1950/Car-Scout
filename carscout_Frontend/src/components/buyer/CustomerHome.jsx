@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaCarSide } from "react-icons/fa";
@@ -95,7 +95,7 @@ export const CustomerHome = () => {
   const fetchCars = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:4444/car/all");
+      const res = await API.get("/car/all");
       setCars(Array.isArray(res.data) ? res.data : []);
       setError("");
     } catch (err) {
@@ -256,7 +256,7 @@ export const CustomerHome = () => {
         email: inquiryForm.email,
         message: `[${selectedCar.brand} ${selectedCar.model}] ${inquiryForm.message}`,
       };
-      await axios.post("http://localhost:4444/inquiry/create", payload);
+      await API.post("/inquiry/create", payload);
       toast.success("Inquiry sent successfully");
       setInquiryForm((prev) => ({ ...prev, message: "" }));
       closeActionModal();
@@ -317,7 +317,7 @@ export const CustomerHome = () => {
         rating: Number(reviewForm.rating),
         comment: reviewForm.comment,
       };
-      await axios.post("http://localhost:4444/reviews/add", payload);
+      await API.post("/reviews/add", payload);
       toast.success("Review submitted");
       setReviewForm({ rating: "5", comment: "" });
       closeActionModal();

@@ -9,7 +9,7 @@ import {
   FaRoad,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../../utils/api";
 import UserNavbar from "../../layouts/UserNavbar";
 import { isAdminAuthenticated, isAuthenticated } from "../../utils/auth";
 import SellCarModel from "../../components/seller/SellCarModel";
@@ -44,9 +44,9 @@ const Home = () => {
     const fetchHomeData = async () => {
       try {
         const [carsRes, summaryRes, testDriveRes] = await Promise.allSettled([
-          axios.get("http://localhost:4444/car/all"),
-          axios.get("http://localhost:4444/admin/dashboard"),
-          axios.get("http://localhost:4444/testdrive/all"),
+          API.get("/car/all"),
+          API.get("/admin/dashboard"),
+          API.get("/testdrive/all"),
         ]);
 
         if (carsRes.status === "fulfilled") {

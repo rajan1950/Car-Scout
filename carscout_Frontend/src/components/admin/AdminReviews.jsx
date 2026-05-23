@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 
-const REVIEW_BASE_URL = "http://localhost:4444/reviews";
+const REVIEW_BASE_URL = "/reviews";
 
 const initialForm = {
   userId: "",

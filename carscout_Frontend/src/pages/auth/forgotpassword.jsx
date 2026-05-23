@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import API from '../../utils/api'
 
 export const ForgotPassword = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -23,7 +23,7 @@ export const ForgotPassword = () => {
 		try {
 			setIsSubmitting(true)
 
-			const res = await axios.post('http://localhost:4444/user/forgotpassword', data)
+			const res = await API.post('/user/forgotpassword', data)
 
 			if (res.status === 200) {
 				toast.success(res.data.message || 'Reset password link sent to your email')

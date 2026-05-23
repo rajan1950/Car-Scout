@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 
-const ADMIN_BASE_URL = "http://localhost:4444/admin";
-const INQUIRY_BASE_URL = "http://localhost:4444/inquiry";
+const ADMIN_BASE_URL = "/admin";
+const INQUIRY_BASE_URL = "/inquiry";
 
 const initialForm = {
   name: "",
@@ -51,7 +51,7 @@ export const AdminInquiries = () => {
 
   const fetchInquiries = async () => {
     try {
-      const res = await axios.get(`${ADMIN_BASE_URL}/inquiries`);
+      const res = await API.get(`${ADMIN_BASE_URL}/inquiries`);
       const rows = Array.isArray(res.data) ? res.data : [];
       setInquiries(rows.map((item) => normalizeInquiryDate(item)));
       setError("");
@@ -98,10 +98,7 @@ export const AdminInquiries = () => {
     setSubmitting(true);
     try {
       if (editingInquiryId) {
-        const res = await axios.put(
-          `${INQUIRY_BASE_URL}/update/${editingInquiryId}`,
-          form
-        );
+        const res = await API.put(`${INQUIRY_BASE_URL}/update/${editingInquiryId}`, form);
         const updatedInquiry = res.data;
         if (updatedInquiry?._id) {
           const normalizedUpdated = normalizeInquiryDate(updatedInquiry, new Date().toISOString());
@@ -115,7 +112,7 @@ export const AdminInquiries = () => {
         }
         toast.success("Inquiry updated");
       } else {
-        const res = await axios.post(`${INQUIRY_BASE_URL}/create`, form);
+        const res = await API.post(`${INQUIRY_BASE_URL}/create`, form);
         const createdInquiry = res.data;
         if (createdInquiry?._id) {
           const normalizedCreated = normalizeInquiryDate(createdInquiry, new Date().toISOString());
@@ -147,7 +144,7 @@ export const AdminInquiries = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${INQUIRY_BASE_URL}/delete/${id}`);
+      await API.delete(`${INQUIRY_BASE_URL}/delete/${id}`);
       setInquiries((prev) => prev.filter((item) => item._id !== id));
       toast.success("Inquiry deleted");
     } catch (err) {

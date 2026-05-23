@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import API from '../../utils/api'
 
 export const ResetPassword = () => {
 	const { token } = useParams()
@@ -46,7 +46,7 @@ export const ResetPassword = () => {
 				token,
 			}
 
-			const res = await axios.put('http://localhost:4444/user/resetpassword', payload)
+			const res = await API.put('/user/resetpassword', payload)
 
 			if (res.status === 200) {
 				toast.success(res.data.message || 'Password reset successful')

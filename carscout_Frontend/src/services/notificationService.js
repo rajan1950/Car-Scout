@@ -1,7 +1,7 @@
-import axios from "axios";
+import API from "../utils/api";
 import { readAuthSession } from "../utils/auth";
 
-const NOTIFICATION_BASE_URL = "http://localhost:4444/notification";
+const NOTIFICATION_BASE_URL = "/notification";
 
 const getAuthHeaders = () => {
   const token = readAuthSession()?.token;
@@ -16,7 +16,7 @@ const getAuthHeaders = () => {
 };
 
 export const getMyNotifications = async ({ page = 1, limit = 20 } = {}) => {
-  const response = await axios.get(`${NOTIFICATION_BASE_URL}/my`, {
+  const response = await API.get(`${NOTIFICATION_BASE_URL}/my`, {
     params: { page, limit },
     headers: getAuthHeaders(),
   });
@@ -25,7 +25,7 @@ export const getMyNotifications = async ({ page = 1, limit = 20 } = {}) => {
 };
 
 export const getUnreadNotificationCount = async () => {
-  const response = await axios.get(`${NOTIFICATION_BASE_URL}/unread-count`, {
+  const response = await API.get(`${NOTIFICATION_BASE_URL}/unread-count`, {
     headers: getAuthHeaders(),
   });
 
@@ -33,7 +33,7 @@ export const getUnreadNotificationCount = async () => {
 };
 
 export const markNotificationAsRead = async (id) => {
-  const response = await axios.patch(
+  const response = await API.patch(
     `${NOTIFICATION_BASE_URL}/${id}/read`,
     {},
     {
@@ -45,19 +45,13 @@ export const markNotificationAsRead = async (id) => {
 };
 
 export const markAllNotificationsAsRead = async () => {
-  const response = await axios.patch(
-    `${NOTIFICATION_BASE_URL}/read-all`,
-    {},
-    {
-      headers: getAuthHeaders(),
-    }
-  );
+  const response = await API.patch(`${NOTIFICATION_BASE_URL}/read-all`, {}, { headers: getAuthHeaders() });
 
   return response.data;
 };
 
 export const deleteNotificationById = async (id) => {
-  const response = await axios.delete(`${NOTIFICATION_BASE_URL}/${id}`, {
+  const response = await API.delete(`${NOTIFICATION_BASE_URL}/${id}`, {
     headers: getAuthHeaders(),
   });
 
@@ -65,7 +59,7 @@ export const deleteNotificationById = async (id) => {
 };
 
 export const createNotificationForUser = async (payload) => {
-  const response = await axios.post(`${NOTIFICATION_BASE_URL}/create`, payload, {
+  const response = await API.post(`${NOTIFICATION_BASE_URL}/create`, payload, {
     headers: getAuthHeaders(),
   });
 

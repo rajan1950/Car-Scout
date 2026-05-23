@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 
-const TESTDRIVE_BASE_URL = "http://localhost:4444/testdrive";
+const TESTDRIVE_BASE_URL = "/testdrive";
 
 const initialForm = {
   userId: "",

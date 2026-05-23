@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 import { readAuthSession } from "../../utils/auth";
 
-const ADMIN_BASE_URL = "http://localhost:4444/admin";
-const USER_BASE_URL = "http://localhost:4444/user";
+const ADMIN_BASE_URL = "/admin";
+const USER_BASE_URL = "/user";
 
 const getAuthHeaders = () => {
   const token = readAuthSession()?.token;

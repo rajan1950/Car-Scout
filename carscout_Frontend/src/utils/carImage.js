@@ -1,4 +1,4 @@
-const BACKEND_ORIGIN = "http://localhost:4444";
+const BACKEND_ORIGIN = import.meta.env.VITE_API_URL || "http://localhost:4444";
 const LOCAL_GALLERY_OVERRIDES_KEY = "carscout.localCarImageGalleryOverrides";
 
 const ABSOLUTE_URL_PATTERN = /^https?:\/\//i;

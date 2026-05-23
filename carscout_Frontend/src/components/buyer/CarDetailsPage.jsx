@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -86,7 +86,7 @@ export const CarDetailsPage = () => {
       setError("");
 
       try {
-        const response = await axios.get("http://localhost:4444/car/all");
+        const response = await API.get("/car/all");
         const cars = Array.isArray(response?.data) ? response.data : [];
         setAllCars(cars);
         const selected = cars.find((item) => item?._id === carId);
@@ -221,7 +221,7 @@ export const CarDetailsPage = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:4444/user/getallusers", {
+        const response = await API.get("/user/getallusers", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -263,7 +263,7 @@ export const CarDetailsPage = () => {
     setIsSubmittingInquiry(true);
 
     try {
-      await axios.post("http://localhost:4444/inquiry/create", {
+      await API.post("/inquiry/create", {
         name: inquiryForm.name,
         email: inquiryForm.email,
         message: `[${car.brand} ${car.model}] ${inquiryForm.message}`,

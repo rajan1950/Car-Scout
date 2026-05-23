@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 import { sendTransactionalEmailApi } from "../../services/emailService";
 import {
@@ -69,7 +69,7 @@ export const SignupOtpVerify = () => {
   }, [isRedirectingAfterSuccess, navigate, pending?.signupData]);
 
   const registerUser = async (signupData) => {
-    const res = await axios.post("http://localhost:4444/user/register", {
+    const res = await API.post("/user/register", {
       firstname: signupData.firstname,
       lastname: signupData.lastname,
       email: signupData.email,

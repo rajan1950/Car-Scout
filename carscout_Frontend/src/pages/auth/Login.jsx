@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import axios from 'axios'
+import API from '../../utils/api'
 import { normalizeRole, saveAuthSession } from '../../utils/auth'
 
 const MAX_FAILED_ATTEMPTS = 5
@@ -125,7 +125,7 @@ const submitHandler = async (data) => {
   setIsLoading(true)
   try {
 
-    const res = await axios.post("http://localhost:4444/user/login", data)
+    const res = await API.post("/user/login", data)
 
     console.log("response...", res.data)
 

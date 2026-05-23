@@ -1,7 +1,7 @@
-import axios from "axios";
+import API from "../utils/api";
 import { readAuthSession } from "../utils/auth";
 
-const BOOKING_BASE_URL = "http://localhost:4444/testdrive";
+const BOOKING_BASE_URL = "/testdrive";
 
 const getAuthHeaders = () => {
   const token = readAuthSession()?.token;
@@ -25,7 +25,7 @@ export const createBookingApi = async (payload) => {
     status: payload?.status || "pending",
   };
 
-  const response = await axios.post(`${BOOKING_BASE_URL}/add`, normalizedPayload, {
+  const response = await API.post(`${BOOKING_BASE_URL}/add`, normalizedPayload, {
     headers: getAuthHeaders(),
   });
 
@@ -33,7 +33,7 @@ export const createBookingApi = async (payload) => {
 };
 
 export const getUserBookingsApi = async (userId) => {
-  const response = await axios.get(`${BOOKING_BASE_URL}/user/${userId}`, {
+  const response = await API.get(`${BOOKING_BASE_URL}/user/${userId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -41,7 +41,7 @@ export const getUserBookingsApi = async (userId) => {
 };
 
 export const getAllBookingsApi = async () => {
-  const response = await axios.get(`${BOOKING_BASE_URL}/all`, {
+  const response = await API.get(`${BOOKING_BASE_URL}/all`, {
     headers: getAuthHeaders(),
   });
 
@@ -49,7 +49,7 @@ export const getAllBookingsApi = async () => {
 };
 
 export const updateBookingStatusApi = async (id, status) => {
-  const response = await axios.patch(
+  const response = await API.patch(
     `${BOOKING_BASE_URL}/${id}/status`,
     { status },
     {
@@ -61,7 +61,7 @@ export const updateBookingStatusApi = async (id, status) => {
 };
 
 export const deleteBookingApi = async (id) => {
-  const response = await axios.delete(`${BOOKING_BASE_URL}/${id}`, {
+  const response = await API.delete(`${BOOKING_BASE_URL}/${id}`, {
     headers: getAuthHeaders(),
   });
 

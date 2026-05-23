@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 import { getAuthProfile, getAuthUserId, readAuthSession } from "../../utils/auth";
 import {
@@ -14,8 +14,8 @@ import {
 } from "../../utils/carOwnership";
 import { normalizeOwnerForApi } from "../../utils/owner";
 
-const ADMIN_BASE_URL = "http://localhost:4444/admin";
-const CAR_BASE_URL = "http://localhost:4444/car";
+const ADMIN_BASE_URL = "/admin";
+const CAR_BASE_URL = "/car";
 
 const initialForm = {
   brand: "",
@@ -47,7 +47,7 @@ export const AdminCars = () => {
 
   const fetchCars = async () => {
     try {
-      const res = await axios.get(`${ADMIN_BASE_URL}/cars`);
+      const res = await API.get(`${ADMIN_BASE_URL}/cars`);
       setCars(Array.isArray(res.data) ? res.data : []);
       setError("");
     } catch (err) {
@@ -114,7 +114,7 @@ export const AdminCars = () => {
     setSubmitting(true);
     try {
       if (editingCarId) {
-        const res = await axios.put(`${CAR_BASE_URL}/${editingCarId}`, payload);
+        const res = await API.put(`${CAR_BASE_URL}/${editingCarId}`, payload);
         const updatedCar = res.data;
         if (updatedCar?._id) {
           setCars((prev) =>
@@ -142,7 +142,7 @@ export const AdminCars = () => {
           formData.append("image", form.imageFile);
         }
 
-        const res = await axios.post(`${CAR_BASE_URL}/add`, formData);
+        const res = await API.post(`${CAR_BASE_URL}/add`, formData);
         const createdCar = res.data?.data;
         const createdCarId = createdCar?._id || res.data?._id || "";
         saveCarCreatorMeta(createdCarId, {

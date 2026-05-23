@@ -1,7 +1,7 @@
-import axios from "axios";
+import API from "../utils/api";
 import { readAuthSession } from "../utils/auth";
 
-const OFFER_BASE_URL = "http://localhost:4444/offer";
+const OFFER_BASE_URL = "/offer";
 
 const getAuthHeaders = () => {
   const token = readAuthSession()?.token;
@@ -16,7 +16,7 @@ const getAuthHeaders = () => {
 };
 
 export const createOfferApi = async (payload) => {
-  const response = await axios.post(`${OFFER_BASE_URL}/create`, payload, {
+  const response = await API.post(`${OFFER_BASE_URL}/create`, payload, {
     headers: getAuthHeaders(),
   });
 
@@ -24,7 +24,7 @@ export const createOfferApi = async (payload) => {
 };
 
 export const getMyOffersApi = async ({ type, status } = {}) => {
-  const response = await axios.get(`${OFFER_BASE_URL}/my`, {
+  const response = await API.get(`${OFFER_BASE_URL}/my`, {
     params: {
       ...(type ? { type } : {}),
       ...(status ? { status } : {}),
@@ -36,7 +36,7 @@ export const getMyOffersApi = async ({ type, status } = {}) => {
 };
 
 export const updateOfferApi = async (offerId, payload) => {
-  const response = await axios.patch(`${OFFER_BASE_URL}/${offerId}`, payload, {
+  const response = await API.patch(`${OFFER_BASE_URL}/${offerId}`, payload, {
     headers: getAuthHeaders(),
   });
 

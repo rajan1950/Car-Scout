@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getAuthProfile, getAuthUserId } from "../../utils/auth";
@@ -148,7 +148,7 @@ export const BuyCarPage = () => {
       setCarError("");
 
       try {
-        const response = await axios.get("http://localhost:4444/car/all");
+        const response = await API.get("/car/all");
         const cars = Array.isArray(response?.data) ? response.data : [];
         const selectedCar = cars.find((item) => item?._id === carId);
 

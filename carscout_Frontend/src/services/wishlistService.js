@@ -1,7 +1,7 @@
-import axios from "axios";
+import API from "../utils/api";
 import { readAuthSession } from "../utils/auth";
 
-const WISHLIST_BASE_URL = "http://localhost:4444/wishlist";
+const WISHLIST_BASE_URL = "/wishlist";
 
 const getAuthHeaders = () => {
   const token = readAuthSession()?.token;
@@ -16,7 +16,7 @@ const getAuthHeaders = () => {
 };
 
 export const addToWishlistApi = async (payload) => {
-  const response = await axios.post(`${WISHLIST_BASE_URL}/add`, payload, {
+  const response = await API.post(`${WISHLIST_BASE_URL}/add`, payload, {
     headers: getAuthHeaders(),
   });
 
@@ -24,7 +24,7 @@ export const addToWishlistApi = async (payload) => {
 };
 
 export const getUserWishlistApi = async (userId) => {
-  const response = await axios.get(`${WISHLIST_BASE_URL}/user/${userId}`, {
+  const response = await API.get(`${WISHLIST_BASE_URL}/user/${userId}`, {
     headers: getAuthHeaders(),
   });
 
@@ -32,7 +32,7 @@ export const getUserWishlistApi = async (userId) => {
 };
 
 export const getAllWishlistItemsApi = async () => {
-  const response = await axios.get(`${WISHLIST_BASE_URL}/all`, {
+  const response = await API.get(`${WISHLIST_BASE_URL}/all`, {
     headers: getAuthHeaders(),
   });
 
@@ -40,7 +40,7 @@ export const getAllWishlistItemsApi = async () => {
 };
 
 export const removeFromWishlistApi = async (payload) => {
-  const response = await axios.delete(`${WISHLIST_BASE_URL}/remove`, {
+  const response = await API.delete(`${WISHLIST_BASE_URL}/remove`, {
     data: payload,
     headers: getAuthHeaders(),
   });
@@ -49,7 +49,7 @@ export const removeFromWishlistApi = async (payload) => {
 };
 
 export const deleteWishlistItemByIdApi = async (id) => {
-  const response = await axios.delete(`${WISHLIST_BASE_URL}/${id}`, {
+  const response = await API.delete(`${WISHLIST_BASE_URL}/${id}`, {
     headers: getAuthHeaders(),
   });
 

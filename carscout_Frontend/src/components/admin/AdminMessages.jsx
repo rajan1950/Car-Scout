@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { toast } from "react-toastify";
 
-const MESSAGE_BASE_URL = "http://localhost:4444/message";
+const MESSAGE_BASE_URL = "/message";
 
 const initialForm = {
   name: "",
@@ -22,7 +22,7 @@ export const AdminMessages = () => {
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(`${MESSAGE_BASE_URL}/all`);
+      const res = await API.get(`${MESSAGE_BASE_URL}/all`);
       setMessages(Array.isArray(res.data) ? res.data : []);
       setError("");
     } catch (err) {
@@ -49,7 +49,7 @@ export const AdminMessages = () => {
 
     setSubmitting(true);
     try {
-      const res = await axios.post(`${MESSAGE_BASE_URL}/create`, form);
+      const res = await API.post(`${MESSAGE_BASE_URL}/create`, form);
       const created = res.data?.data;
       if (created?._id) {
         setMessages((prev) => [created, ...prev]);

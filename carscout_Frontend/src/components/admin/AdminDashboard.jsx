@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../utils/api";
 import { Link } from "react-router-dom";
 import { ADMIN_SETTINGS_EVENT, readAdminSettings } from "./adminPanelSettings";
 import { getAllWishlistItemsApi } from "../../services/wishlistService";
@@ -16,10 +16,10 @@ import {
   YAxis,
 } from "recharts";
 
-const ADMIN_BASE_URL = "http://localhost:4444/admin";
-const MESSAGE_BASE_URL = "http://localhost:4444/message";
-const REVIEW_BASE_URL = "http://localhost:4444/reviews";
-const TESTDRIVE_BASE_URL = "http://localhost:4444/testdrive";
+const ADMIN_BASE_URL = "/admin";
+const MESSAGE_BASE_URL = "/message";
+const REVIEW_BASE_URL = "/reviews";
+const TESTDRIVE_BASE_URL = "/testdrive";
 
 export const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -44,10 +44,10 @@ export const AdminDashboard = () => {
 
     try {
       const [summaryRes, messageRes, reviewRes, testDriveRes, wishlistRes] = await Promise.allSettled([
-        axios.get(`${ADMIN_BASE_URL}/dashboard`),
-        axios.get(`${MESSAGE_BASE_URL}/all`),
-        axios.get(`${REVIEW_BASE_URL}/all`),
-        axios.get(`${TESTDRIVE_BASE_URL}/all`),
+        API.get(`${ADMIN_BASE_URL}/dashboard`),
+        API.get(`${MESSAGE_BASE_URL}/all`),
+        API.get(`${REVIEW_BASE_URL}/all`),
+        API.get(`${TESTDRIVE_BASE_URL}/all`),
         getAllWishlistItemsApi(),
       ]);
 
