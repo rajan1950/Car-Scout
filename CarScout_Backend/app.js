@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ CORS - Must be FIRST before all routes and middleware
+// ✅ CORS - Must be FIRST
 const allowedOrigins = [
   "https://car-scout-pied.vercel.app",
   "http://localhost:5173",
@@ -13,7 +13,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
@@ -26,8 +25,8 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// ✅ Handle preflight OPTIONS requests for all routes
-app.options("*", cors());
+// ✅ Fix: use regex instead of "*"
+app.options(/(.*)/, cors());
 
 // Middleware
 app.use(express.json());
