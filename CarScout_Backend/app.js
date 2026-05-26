@@ -11,14 +11,34 @@ const allowedOrigins = [
   "http://localhost:3000"
 ];
 
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
+if (process.env.CORS_ORIGINS) {
+  process.env.CORS_ORIGINS.split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+    .forEach((origin) => allowedOrigins.push(origin));
+}
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  return /^http:\/\/localhost:\d+$/.test(origin);
+};
+
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
+    if (process.env.NODE_ENV !== "production") {
       return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
     }
+
+    if (isAllowedOrigin(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -35,45 +55,50 @@ app.use(express.json());
 const DBConnection = require("./src/utils/DBConnection");
 DBConnection();
 
+const mountRoute = (basePath, router) => {
+  app.use(basePath, router);
+  app.use(`/api${basePath}`, router);
+};
+
 // Routes
 const userRoutes = require("./src/routes/UserRoutes");
-app.use("/user", userRoutes);
+mountRoute("/user", userRoutes);
 
 const carRoutes = require("./src/routes/CarRoutes");
-app.use("/car", carRoutes);
+mountRoute("/car", carRoutes);
 
 const inquiryRoutes = require("./src/routes/InquiryRoutes");
-app.use("/inquiry", inquiryRoutes);
+mountRoute("/inquiry", inquiryRoutes);
 
 const adminRoutes = require("./src/routes/AdminRoutes");
-app.use("/admin", adminRoutes);
+mountRoute("/admin", adminRoutes);
 
 const messageRoutes = require("./src/routes/MessageRoutes");
-app.use("/message", messageRoutes);
+mountRoute("/message", messageRoutes);
 
 const reviewRoutes = require("./src/routes/ReviewRoutes");
-app.use("/reviews", reviewRoutes);
+mountRoute("/reviews", reviewRoutes);
 
 const testDriveRoutes = require("./src/routes/TestDriveRoutes");
-app.use("/testdrive", testDriveRoutes);
+mountRoute("/testdrive", testDriveRoutes);
 
 const notificationRoutes = require("./src/routes/NotificationRoutes");
-app.use("/notification", notificationRoutes);
+mountRoute("/notification", notificationRoutes);
 
 const wishlistRoutes = require("./src/routes/WishlistRoutes");
-app.use("/wishlist", wishlistRoutes);
+mountRoute("/wishlist", wishlistRoutes);
 
 const bookingRoutes = require("./src/routes/BookingRoutes");
-app.use("/booking", bookingRoutes);
+mountRoute("/booking", bookingRoutes);
 
 const reportRoutes = require("./src/routes/ReportRoutes");
-app.use("/report", reportRoutes);
+mountRoute("/report", reportRoutes);
 
 const emailRoutes = require("./src/routes/EmailRoutes");
-app.use("/email", emailRoutes);
+mountRoute("/email", emailRoutes);
 
 const offerRoutes = require("./src/routes/offerRoutes");
-app.use("/offer", offerRoutes);
+mountRoute("/offer", offerRoutes);
 
 // Test Drive Reminder Worker
 const { startTestDriveReminderWorker } = require("./src/controller/TestDriveController");
@@ -81,6 +106,10 @@ const { startTestDriveReminderWorker } = require("./src/controller/TestDriveCont
 // Default Route
 app.get("/", (req, res) => {
   res.send("Car Scout Backend API Running...");
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ ok: true, service: "carscout-backend" });
 });
 
 // PORT
